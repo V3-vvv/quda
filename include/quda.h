@@ -450,6 +450,11 @@ extern "C" {
     /** Whether to use fused kernels for mobius */
     QudaBoolean use_mobius_fused_kernel;
 
+    int hermitian_wilson_n_ev;
+    int hermitian_wilson_n_kr;
+    double hermitian_wilson_tol;
+    double overlap_invsqrt_tol;
+
     /**
      * Parameters for distance preconditioning algorithm proposed in arXiv:1006.4028,
      * which is useful to solve a precise heavy quark propagator.

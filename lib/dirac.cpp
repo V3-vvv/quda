@@ -20,6 +20,7 @@ namespace quda {
     halo_precision(param.halo_precision),
     commDim(param.commDim),
     use_mobius_fused_kernel(param.use_mobius_fused_kernel),
+    chebyshev_degree(param.chebyshev_degree),
     distance_pc_alpha0(param.distance_pc_alpha0),
     distance_pc_t0(param.distance_pc_t0),
     profile("Dirac", false)
@@ -48,6 +49,7 @@ namespace quda {
     type(dirac.type),
     halo_precision(dirac.halo_precision),
     commDim(dirac.commDim),
+    chebyshev_degree(dirac.chebyshev_degree),
     distance_pc_alpha0(dirac.distance_pc_alpha0),
     distance_pc_t0(dirac.distance_pc_t0),
     profile("Dirac", false)
@@ -75,6 +77,8 @@ namespace quda {
       distance_pc_alpha0 = dirac.distance_pc_alpha0;
       distance_pc_t0 = dirac.distance_pc_t0;
       profile = dirac.profile;
+
+      chebyshev_degree = dirac.chebyshev_degree;
 
       if (type != dirac.type) errorQuda("Trying to copy between incompatible types %d %d", type, dirac.type);
     }
@@ -186,6 +190,12 @@ namespace quda {
     } else if (param.type == QUDA_MOBIUS_DOMAIN_WALLPC_EOFA_DIRAC) {
       if (getVerbosity() >= QUDA_DEBUG_VERBOSE) printfQuda("Creating a DiracMobiusEofaPC operator\n");
       return new DiracMobiusEofaPC(param);
+    } else if (param.type == QUDA_OVERLAP_DIRAC) {
+      if (getVerbosity() >= QUDA_DEBUG_VERBOSE) printfQuda("Creating a DiracOverlap operator\n");
+      return new DiracOverlap(param);
+    } else if (param.type == QUDA_OVERLAPPC_DIRAC) {
+      if (getVerbosity() >= QUDA_DEBUG_VERBOSE) printfQuda("Creating a DiracOverlapPC operator\n");
+      errorQuda("Overlap Dirac doesn't support even-odd preconditioning\n");
     } else if (param.type == QUDA_STAGGERED_DIRAC) {
       if (getVerbosity() >= QUDA_DEBUG_VERBOSE) printfQuda("Creating a DiracStaggered operator\n");
       return new DiracStaggered(param);
@@ -295,6 +305,10 @@ namespace quda {
       case QUDA_COARSEPC_DIRAC:
       case QUDA_GAUGE_LAPLACEPC_DIRAC:
         steps = 2;
+        break;
+      case QUDA_OVERLAP_DIRAC:
+      case QUDA_OVERLAPPC_DIRAC:
+        steps = chebyshev_degree;
         break;
       default:
         errorQuda("Unsupported Dslash type %d.\n", type);
