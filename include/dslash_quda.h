@@ -766,8 +766,8 @@ namespace quda
      @param[in] comm_override Override for which dimensions are partitioned
      @param[in] profile The TimeProfile used for profiling the dslash
   */
-  void ApplyOverlap(ColorSpinorField &out, const ColorSpinorField &in, const GaugeField &U, double kappa,
-                   const ColorSpinorField &x, int parity, bool dagger, const int *comm_override, TimeProfile &profile);
+  void ApplyOverlap(cvector_ref<ColorSpinorField> &out, cvector_ref<const ColorSpinorField> &in, const GaugeField &U, double kappa,
+                   cvector_ref<const ColorSpinorField> &x, int parity, bool dagger, const int *comm_override, TimeProfile &profile);
 
   // The EOFA stuff
   namespace mobius_eofa
