@@ -6,6 +6,7 @@
 #include <dirac_quda.h>
 #include <color_spinor_field.h>
 #include <eigen_helper.h>
+#include <vector>
 
 namespace quda
 {
@@ -339,6 +340,30 @@ namespace quda
     */
     void sortArrays(QudaEigSpectrumType spec_type, int n, std::vector<Complex> &x, std::vector<int> &y);
   };
+
+   /**
+   @brief Eigensolver for the Lanczos&ritz method.
+    */
+   class TestSolver : public EigenSolver 
+   {
+      protected:
+         std::vector<double> alpha = {};
+         std::vector<double> beta = {};
+
+      public:
+         TestSolver(const DiracMatrix &mat, QudaEigParam *eig_param);
+
+         virtual bool hermitian() { return true; } /** TestSolver is only for Hermitian systems */
+
+         void operator()(std::vector<ColorSpinorField> &kSpace, std::vector<Complex> &evals);
+
+         void lanczos(std::vector<ColorSpinorField> &v, int j);
+
+         void ritz(VectorXd& beta_k, VectorXd& evals_nev, MatrixXd& evecs_nev);
+
+         static bool compareIndices(const std::pair<double, int>& a, const std::pair<double, int>& b);
+
+   };
 
   /**
      @brief Thick Restarted Lanczos Method.

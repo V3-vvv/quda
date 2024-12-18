@@ -141,6 +141,7 @@ typedef enum QudaEigType_s {
   QUDA_EIG_BLK_TR_LANCZOS, // Block Thick restarted lanczos solver
   QUDA_EIG_IR_ARNOLDI,     // Implicitly Restarted Arnoldi solver
   QUDA_EIG_BLK_IR_ARNOLDI, // Block Implicitly Restarted Arnoldi solver
+  QUDA_EIG_TEST_SOLVER,
   QUDA_EIG_INVALID = QUDA_INVALID_ENUM
 } QudaEigType;
 

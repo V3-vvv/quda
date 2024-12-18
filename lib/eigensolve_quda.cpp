@@ -1,3 +1,4 @@
+#include "enum_quda.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -108,6 +109,11 @@ namespace quda
       logQuda(QUDA_VERBOSE, "Creating Block TR Lanczos eigensolver\n");
       eig_solver = new BLKTRLM(mat, eig_param);
       break;
+    case QUDA_EIG_TEST_SOLVER:
+      logQuda(QUDA_VERBOSE, "Creating test eigensolver\n");
+      eig_solver = new TestSolver(mat, eig_param);
+      break;
+
     default: errorQuda("Invalid eig solver type");
     }
 
